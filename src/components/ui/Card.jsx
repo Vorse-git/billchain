@@ -1,7 +1,7 @@
 const Card = ({ title, description, link, image }) => {
   return (
     <div className="p-6 bg-white rounded-2xl border border-gray-200 hover:shadow-2xl transition-transform duration-400 ease-in-out hover:translate-x-2 flex items-center justify-between gap-4">
-      {/* Contenido de texto */}
+      {/* Text content */}
       <div>
         <h2 className="text-lg font-semibold text-gray-700">{title}</h2>
         <p className="text-sm text-gray-600">{description}</p>
@@ -27,7 +27,7 @@ const Card = ({ title, description, link, image }) => {
         </a>
       </div>
 
-      {/* Imagen a la derecha */}
+      {/* Image on the right */}
       <img src={image} alt={title} className="w-16 h-16 md:w-20 md:h-20" />
     </div>
   );

@@ -1,6 +1,6 @@
 // src/components/FormElements/CustomInput.jsx
-import React from 'react'; // No es necesario useState si usamos pseudo-clases
-import { ExclamationCircleIcon } from '@heroicons/react/20/solid'; // Icono para error
+import React from 'react';
+import { ExclamationCircleIcon } from '@heroicons/react/20/solid';
 
 const CustomInputSimple = ({
   label,
@@ -8,28 +8,28 @@ const CustomInputSimple = ({
   value,
   onChange,
   type = 'text',
-  className = '',      // Para clases externas
-  readOnly = false,    // <-- Nueva prop
-  disabled = false,    // <-- Nueva prop
-  error = null,        // <-- Nueva prop (mensaje de error o null)
-  placeholder = "Insert", // <-- Usar prop para placeholder
-  ...props           // <-- Resto de props para el input
+  className = '',          // For external classes
+  readOnly = false,
+  disabled = false,
+  error = null,            // <-- New prop (error message or null)
+  placeholder = "Insert", // <-- Use prop for placeholder
+  ...props                      // <-- Rest of props for the input
 }) => {
 
-  // IDs para accesibilidad
+  // IDs for accessibility
   const inputId = id || `input-${React.useId()}`;
   const errorId = error ? `${inputId}-error` : undefined;
 
-  // --- Construcción dinámica de clases con Tailwind ---
+  // --- Dynamically building classes with Tailwind ---
 
-  // Clases base (siempre aplicadas)
+  // Base classes (always applied)
   const baseClasses = `
      relative block w-full h-12 px-3 py-2 border rounded-md 
       flex items-center justify-between border-gray-300
       text-sm transition duration-150 ease-in-out
   `;
 
-  // Clases de estado (se aplican condicionalmente)
+  // State classes (applied conditionally)
   const stateClasses = `
     ${error
       ? 'border-red-500 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' // Estado de error
@@ -42,7 +42,7 @@ const CustomInputSimple = ({
     ${disabled ? 'opacity-70' : ''} // Opacidad extra si está disabled
   `;
 
-  // Combinar clases
+  // Combine classes
   const combinedClasses = `${baseClasses} ${stateClasses} ${className}`.replace(/\s+/g, ' ').trim();
 
   return (
@@ -52,7 +52,7 @@ const CustomInputSimple = ({
           {label}
         </label>
       )}
-      <div className="relative rounded-md"> {/* Contenedor para icono */}
+      <div className="relative rounded-md"> {/* Container for icon */}
         <input
           type={type}
           id={inputId}
@@ -61,22 +61,22 @@ const CustomInputSimple = ({
           readOnly={readOnly}
           disabled={disabled}
           placeholder={placeholder}
-          className={combinedClasses} // Aplica clases combinadas
+          className={combinedClasses} // Apply combined classes
           aria-invalid={!!error}
           aria-describedby={errorId}
-          {...props} // Pasa otras props (inputMode, step, etc.)
+          {...props} // Pass other props (inputMode, step, etc.)
         />
-        {/* Icono de Error (se muestra si hay error) */}
+        {/* Error Icon (displayed if there is an error) */}
         {error && (
           <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
             <ExclamationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
           </div>
         )}
       </div>
-      {/* Mensaje de Error (se muestra si hay error) */}
+      {/* Error Icon (displayed if there is an error) */}
       {error && (
         <p className="mt-1 text-xs text-red-600" id={errorId}>
-          {error} {/* Muestra el mensaje de error */}
+          {error} {/* Displays error message */}
         </p>
       )}
     </div>

@@ -9,7 +9,7 @@
 // ============================================================================
 // IMPORTS
 // ============================================================================
-import { getCurrentUserToken } from './authService'; // <-- ¡Aquí está la conexión!
+import { getCurrentUserToken } from './authService';
 import apiClient from '../api/axiosClient';
 // This constant provides a mapping between frontend-friendly template names and backend-expected enum values.
 import { mapFormTypeToApiType } from '../constants/invoiceConstants';
@@ -36,7 +36,7 @@ import { mapFormTypeToApiType } from '../constants/invoiceConstants';
 
 export const reserveInvoiceSequence = async () => {
     try {
-        const token = await getCurrentUserToken(); // Usamos nuestra nueva herramienta
+        const token = await getCurrentUserToken();
 
         if (!token) {
             throw new Error("Acción no autorizada. Por favor, inicie sesión.");

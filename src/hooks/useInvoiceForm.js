@@ -5,10 +5,12 @@
  *              (e.g., CreateInvoice.jsx) to remain clean and focused on presentation.
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { createInvoice } from '../services/invoiceService'; // Service to handle API communication.
+import { addDays } from 'date-fns';
+import { createInvoice,reserveInvoiceSequence  } from '../services/invoiceService';
+import { INVOICE_TYPES } from '../constants/invoiceConstants';
 
 /**
  * A custom hook to manage the state and logic of the invoice creation form.
@@ -22,11 +24,82 @@ export const useInvoiceForm = (initialState) => {
     const [formData, setFormData] = useState(initialState);
     const [errors, setErrors] = useState({});
     const [isSaving, setIsSaving] = useState(false);
+    const [sequence, setSequence] = useState({ number: null, isLoading: false, error: null });
+    const [selectedTemplate, setSelectedTemplate] = useState('');
+
+    // The useEffect to generate the invoice ID now lives in the hook
+    useEffect(() => {
+        if (!selectedTemplate || !sequence.number) return;
+
+        const currentDate = formData.invoiceDate || new Date();
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const cityCode = formData.billTo.city ? formData.billTo.city.substring(0, 2).toUpperCase() : 'XX';
+        const formattedSequence = String(sequence.number).padStart(8, '0');
+        const templateCode = selectedTemplate === INVOICE_TYPES.STANDARD ? 'STD' : 'PRF';
+        const finalId = `${templateCode}-${cityCode}-${month}-${year}-${formattedSequence}`;
+
+        setFormData(prevData => ({ ...prevData, invoiceNumber: finalId }));
+    }, [selectedTemplate, sequence.number, formData.invoiceDate, formData.billTo.city]);
+
+
+    // --- SPECIFIC EVENT HANDLERS ---
+    // We do not expose setFormData, but rather functions that do a specific task.
+    const handleInputChange = (field, value) => {
+        setFormData(prev => ({ ...prev, [field]: value }));
+    };
+
+    const handleNestedInputChange = (parent, field, value) => {
+        setFormData(prev => ({ ...prev, [parent]: { ...prev[parent], [field]: value } }));
+    };
+
+    const handleItemChange = (index, field, value) => {
+        const updatedItems = [...formData.items];
+        updatedItems[index][field] = value;
+        if (field === "quantity" || field === "unitPrice") {
+            const quantity = parseFloat(updatedItems[index].quantity) || 0;
+            const unitPrice = parseFloat(updatedItems[index].unitPrice) || 0;
+            updatedItems[index].total = quantity * unitPrice;
+        }
+        setFormData(prev => ({ ...prev, items: updatedItems }));
+    };
+
+    const handleAddItem = () => {
+        setFormData(prev => ({ ...prev, items: [...prev.items, { description: "", quantity: "", unitPrice: "", total: 0 }] }));
+    };
+
+    const handleRemoveItem = (index) => {
+        setFormData(prev => ({ ...prev, items: prev.items.filter((_, i) => i !== index) }));
+    };
+
+    // The API call logic is now here
+    const handleTemplateChange = async (value) => {
+        setSelectedTemplate(value);
+        if (!value || sequence.number) return;
+
+        setSequence({ number: null, isLoading: true, error: null });
+        try {
+            const response = await reserveInvoiceSequence();
+            setSequence({ number: response.sequence, isLoading: false, error: null });
+
+            // Pre-populate the dates directly in the state
+            setFormData(prevData => ({
+                ...prevData,
+                invoiceDate: prevData.invoiceDate || new Date(),
+                validUntil: (value === INVOICE_TYPES.PROFORMA && !prevData.validUntil) ? addDays(new Date(), 30) : prevData.validUntil,
+            }));
+
+        } catch (err) {
+            toast.error("Failed to reserve invoice ID.");
+            setSequence({ number: null, isLoading: false, error: err.message });
+        }
+    };
+
 
     // --- VALIDATION LOGIC ---
     /**
-     * A pure function that validates the form data.
-     * Being a pure function makes it predictable and easy to test in isolation.
+         * A pure function that validates the form data.
+         * Being a pure function makes it predictable and easy to test in isolation.
      * @param {object} data - The current form data to validate.
      * @param {string} template - The selected invoice template type.
      * @returns {object} An object containing validation errors. An empty object means the form is valid.
@@ -111,10 +184,18 @@ export const useInvoiceForm = (initialState) => {
     // This provides a clean interface, abstracting away the implementation details.
     return {
         formData,
-        setFormData,
         errors,
-        setErrors, // Exposing setErrors can be useful for clearing errors manually.
         isSaving,
+        selectedTemplate,
+        sequenceIsLoading: sequence.isLoading, // We expose a simple boolean
+
+        // Handlers
+        handleInputChange,
+        handleNestedInputChange,
+        handleItemChange,
+        handleAddItem,
+        handleRemoveItem,
+        handleTemplateChange,
         handleSaveInvoice,
     };
 };

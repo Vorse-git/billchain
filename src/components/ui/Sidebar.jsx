@@ -1,18 +1,18 @@
 import { useState } from "react";
-import logo from "../../../img/logo-billchain.svg"; // Nueva ruta del logo
+import logo from "../../../img/logo-billchain.svg";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
 
 const Sidebar = () => {
-  // 2. Obtener la función 'logout' de nuestro contexto
+  // 2.Get the 'logout' function from our context
   const { logout } = useAuth();
 
-  // 3. Crear un manejador para el evento de clic
+  // 3. Create a handler for the click event
   const handleLogout = async () => {
     try {
       await logout();
-      // No necesitamos navegar. El sistema reaccionará solo.
+      // We don't need to navigate. The system will react on its own..
       console.log("Logout solicitado desde el Sidebar.");
     } catch (error) {
       console.error("Error al hacer logout desde el Sidebar:", error);
@@ -21,12 +21,12 @@ const Sidebar = () => {
   return (
 <div className="flex min-h-screen w-[250px] flex-col border-r bg-[#FBFCFF]">
     <div className="px-4 py-6">
-        {/* Logo en la parte superior con 200px de ancho y alineado a la izquierda */}
+        {/* logo at the top with 200px width and aligned to the left */}
         <div className="mb-8 flex justify-start">
           <img src={logo} alt="Logo" className="w-32" /> {/* 200px de ancho (w-48) */}
         </div>
 
-        {/* Menú principal */}
+        {/* Main menu */}
         <ul className="space-y-1">
           {/* Home */}
           <li>
@@ -34,7 +34,7 @@ const Sidebar = () => {
               href="#"
               className="flex items-center gap-2 border-s-[3px] border-transparent px-4 py-3 text-gray-500 hover:border-[#4416A8] hover:bg-[#F9F6FF] hover:text-[#4416A8]"
             >
-              {/* Icono de casa con tamaño de 20px x 20px, color del texto y separación de 18px */}
+              {/* House icon with size 20px x 20px, text color and spacing 18px */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -59,7 +59,7 @@ const Sidebar = () => {
               href="#"
               className="flex items-center gap-2 border-s-[3px] border-transparent px-4 py-3 text-gray-500 hover:border-[#4416A8] hover:bg-[#F9F6FF] hover:text-[#4416A8]"
             >
-              {/* Icono de configuración */}
+              {/* Settings icon */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -89,7 +89,7 @@ const Sidebar = () => {
               href="#"
               className="flex items-center gap-2 border-s-[3px] border-transparent px-4 py-3 text-gray-500 hover:border-[#4416A8] hover:bg-[#F9F6FF] hover:text-[#4416A8]"
             >
-              {/* Icono de soporte */}
+              {/* Support icon */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

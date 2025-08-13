@@ -26,18 +26,18 @@ const CustomSelectSimple = ({
   // Click Outside Handler (simplified useEffect)
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Si el ref existe y el click fue FUERA del elemento ref, cierra el dropdown
+      // If the ref exists and the click was OUTSIDE the ref element, close the dropdown
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
         setOpen(false);
       }
     };
-    // Añade el listener cuando el componente se monta
+    // Add the listener when the component is mounted
     document.addEventListener("mousedown", handleClickOutside);
-    // Limpia el listener cuando el componente se desmonta
+    // Clean the listener when the component is unmounted
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []); // <- Dependencia vacía, el listener vive mientras el componente exista
+  }, []); // <- Empty dependency, the listener lives as long as the component exists
 
 
   // --- Clases para el Div Principal ---
@@ -53,19 +53,19 @@ const CustomSelectSimple = ({
     } else {
       classes += ' bg-white cursor-pointer hover:border-gray-400 hover:shadow-md';
       if (error) {
-        classes += ' border-red-500'; // Borde rojo si hay error
+        classes += ' border-red-500';
       } else if (open) {
-        classes += ' ring-1 ring-purple-600 border-purple-600'; // Estilo "focus" si está abierto
+        classes += ' ring-1 ring-purple-600 border-purple-600'; // "focus" style if open
       } else {
-        classes += ' border-gray-200'; // Borde normal
+        classes += ' border-gray-200';
       }
     }
-    classes += ` ${className}`; // Añade clases externas
+    classes += ` ${className}`;
     return classes.replace(/\s+/g, ' ').trim();
   };
 
 
-  // --- Clases para el Texto del Valor ---
+  // --- Classes for the Text of Value ---
   const getValueTextClasses = () => {
     let classes = 'text-sm truncate pr-2';
     if (readOnly || disabled) {
@@ -73,16 +73,16 @@ const CustomSelectSimple = ({
     } else if (value) {
       classes += ' text-gray-900';
     } else {
-      classes += ' text-gray-400'; // Placeholder color
+      classes += ' text-gray-400';
     }
      if (error) {
-         // Podrías querer un color diferente si hay error, aunque el borde ya lo indica
-         // classes += ' text-red-900'; // Opcional
+         // You might want a different color if there is an error, although the border already indicates it.
+         // classes += ' text-red-900'; // Optional
      }
     return classes;
   };
 
-  // --- Clases para Iconos ---
+  // --- Classes for Icons ---
    const getIconClasses = () => {
       let classes = 'h-5 w-5';
       if (readOnly || disabled) {
@@ -104,19 +104,19 @@ const CustomSelectSimple = ({
       <div
         id={selectId}
         onClick={() => {
-           // Solo permite abrir/cerrar si NO está readOnly o disabled
+           // Only allows opening/closing if NOT readOnly or disabled
            if (!readOnly && !disabled) {
                setOpen(!open);
            }
         }}
-        className={getDivClasses()} // Llama a la función para obtener clases
+        className={getDivClasses()} //Call the function to get classes
         role="combobox"
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-invalid={!!error}
         aria-describedby={errorId}
-        tabIndex={disabled ? -1 : 0} // Foco solo si no está disabled
-         onKeyDown={(e) => { // Abrir/Cerrar con teclado
+        tabIndex={disabled ? -1 : 0} // Focus only if not disabled
+         onKeyDown={(e) => { // Open/Close with keyboard
             if (!readOnly && !disabled && (e.key === 'Enter' || e.key === ' ')) {
                 e.preventDefault();
                 setOpen(!open);
@@ -126,13 +126,13 @@ const CustomSelectSimple = ({
         }}
         {...props}
       >
-        {/* Valor o Placeholder */}
+        {/* Value or Placeholder */}
         <span className={getValueTextClasses()}>
           {value ? options.find((option) => option.value === value)?.label : placeholder}
         </span>
 
-        {/* Iconos a la derecha */}
-        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none"> {/* pointer-events-none aquí para que el click pase al div */}
+        {/* Icons on the right */}
+        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none"> {/* pointer-events-none here so that the click passes to the div */}
            {error && (
              <ExclamationCircleIcon className="h-5 w-5 text-red-500 mr-1" aria-hidden="true" />
            )}
@@ -143,8 +143,8 @@ const CustomSelectSimple = ({
         </div>
       </div>
 
-      {/* Lista de Opciones (Dropdown) */}
-      {/* La condición es más simple: solo depende de 'open' (el click ya está bloqueado si es readOnly/disabled) */}
+      {/*List of Options (Dropdown) */}
+      {/* The condition is simpler: it only depends on 'open' (the click is already blocked if it is readOnly/disabled) */}
       {open && (
         <ul
           className="absolute z-10 mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto w-full"
@@ -155,7 +155,7 @@ const CustomSelectSimple = ({
             <li
               key={option.value}
               onClick={() => {
-                // Verificación redundante pero segura: solo cambia si no está bloqueado
+                // Redundant but secure verification: only switches if not blocked
                 if (!readOnly && !disabled) {
                     onChange(option.value);
                     setOpen(false);
@@ -171,7 +171,7 @@ const CustomSelectSimple = ({
         </ul>
       )}
 
-       {/* Mensaje de Error */}
+       {/* Error message */}
        {error && (
         <p className="mt-1 text-xs text-red-600" id={errorId}>
           {error}

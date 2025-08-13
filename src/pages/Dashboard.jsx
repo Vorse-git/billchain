@@ -3,7 +3,6 @@
 // =========================================================================
 //  IMPORTS
 // =========================================================================
-import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getDashboardData } from '../services/dashboardService'; // Service for fetching dashboard data
 
@@ -12,6 +11,7 @@ import Sidebar from "../components/ui/Sidebar.jsx";
 import Navbar from "../components/ui/Navbar.jsx";
 import Breadcrumbs from "../components/ui/Breadcrumbs.jsx";
 import Card from "../components/ui/Card.jsx";
+import ErrorDisplay from '../components/ui/ErrorDisplay.jsx';
 import PieChartComponent from "../components/features/graphics/PieChart.jsx";
 import TotalInvoicesIssuedCard from "../components/features/graphics/TotalInvoicesIssuedCard.jsx";
 import TotalInvoicesPaymentCard from "../components/features/graphics/TotalInvoicesPaymentCard.jsx";
@@ -115,6 +115,7 @@ const Dashboard = () => {
             <div className="px-6 pb-6">
               <Breadcrumbs breadcrumbs={breadcrumbs} />
             </div>
+
 
             {/* Page Header */}
             <div className="px-6 py-1 pb-6">
