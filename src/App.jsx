@@ -1,6 +1,5 @@
 // src/App.jsx
 import { Routes, Route } from "react-router-dom";
-import { AuthProvider } from './context/AuthContext'; // Provides global authentication state.
 
 // Route components
 import Dashboard from "./pages/Dashboard";
@@ -12,7 +11,7 @@ import PrivateRoute from "./routes/PrivateRoute";
 function App() {
     return (
         // Wrap the entire routing system with AuthProvider to share auth state.
-        <AuthProvider>
+
             <Routes>
                 {/* Public routes (accessible without authentication) */}
                 <Route path="/" element={<Login />} />
@@ -47,7 +46,7 @@ function App() {
                 {/* Fallback route for unmatched URLs */}
                 <Route path="*" element={<h1 className="text-center text-red-500 mt-10 text-xl">❌ Page Not Found</h1>} />
             </Routes>
-        </AuthProvider>
+
     );
 }
 

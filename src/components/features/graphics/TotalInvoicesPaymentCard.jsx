@@ -5,8 +5,8 @@ const TotalInvoicesPaymentCard = ({ number }) => {
 
   useEffect(() => {
     let start = 0;
-    const duration = 1000; // Duración total de la animación en milisegundos
-    const stepTime = Math.max(Math.floor(duration / number), 20); // Tiempo entre cada incremento
+    const duration = 1000;
+    const stepTime = Math.max(Math.floor(duration / number), 20);
 
     const timer = setInterval(() => {
       start += Math.ceil(number / (duration / stepTime));

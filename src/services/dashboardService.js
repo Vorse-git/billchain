@@ -1,10 +1,10 @@
 // src/services/dashboardService.js
-import mockData from './mockData.js'; // El servicio es el único que conoce el mock
+import mockData from './mockData.js';
 
-// En el futuro, esta función hará una llamada real a la API con axios
+// In the future, this function will make an actual API call with axios
 export const getDashboardData = async () => {
     console.log("Fetching dashboard data from mock service...");
-    // Simulamos un retraso de red
+    // We simulate a network delay
     await new Promise(resolve => setTimeout(resolve, 800));
     return mockData;
 };

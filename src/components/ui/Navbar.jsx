@@ -5,7 +5,7 @@ const Navbar = () => {
 
   return (
     <nav className="flex items-center justify-between px-6 py-4 bg-[#FBFCFF] border-b border-gray-00">
-      {/* Buscador con icono */}
+      {/* Search engine with icon */}
       <div className="relative" style={{ width: "400px", height: "40px" }}>
         <input
           type="text"
@@ -32,10 +32,10 @@ const Navbar = () => {
         </span>
       </div>
 
-      {/* Perfil del usuario */}
+      {/* User profile */}
       <div className="flex items-center gap-4">
         <img
-          src="https://images.unsplash.com/photo-1600486913747-55e5470d6f40?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80" // Aquí puedes colocar la URL de la foto de perfil
+          src="https://images.unsplash.com/photo-1600486913747-55e5470d6f40?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
           alt="Usuario"
           className="w-10 h-10 rounded-full border"
         />

@@ -6,7 +6,7 @@ const Breadcrumbs = ({ breadcrumbs }) => {
             key={index}
             className={`${
               index === breadcrumbs.length - 1
-                ? "text-[#4416A8] font-medium" // Página actual en violeta y en negrita
+                ? "text-[#4416A8] font-medium" 
                 : "text-gray-500 font-light"
             }`}
           >

@@ -5,7 +5,7 @@ const TotalInvoicesIssuedCard = ({ number }) => {
 
   useEffect(() => {
     let start = 0;
-    const duration = 1000; // Duración total en milisegundos
+    const duration = 1000;
     const increment = Math.max(Math.floor(number / (duration / 10)), 1);
 
     const timer = setInterval(() => {

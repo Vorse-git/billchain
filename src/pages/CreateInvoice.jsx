@@ -10,13 +10,12 @@
  */
 
 // --- React & Routing ---
+import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { useRef, useState, useEffect } from "react";
+//import CreateInvoiceForm from '../components/forms/CreateInvoiceForm';
 
 // --- Business Logic (Custom Hooks & Constants) ---
 import { useInvoiceForm } from '../hooks/useInvoiceForm';
-import { INVOICE_TYPES } from '../constants/invoiceConstants'; // Note: Not used in this file, but good to know it exists.
-
 // --- UI Components ---
 import Sidebar from "../components/ui/Sidebar.jsx";
 import Navbar from "../components/ui/Navbar.jsx";
@@ -66,16 +65,22 @@ const CreateInvoice = () => {
     const navigate = useNavigate();
 
     // State specific to this page's UI logic (template selection).
-    const [selectedTemplate, setSelectedTemplate] = useState('');
 
     // The `useInvoiceForm` hook encapsulates all form-related business logic (state, validation, submission).
     // This keeps the `CreateInvoice` component clean and focused on presentation (a "presentational component").
     const {
-        formData,       // The current state of the form data.
-        setFormData,    // Function to update the form data.
-        errors,         // Object containing validation errors.
-        isSaving,       // Boolean to track the submission state for UI feedback.
-        handleSaveInvoice, // The submission handler logic from the hook.
+        formData,
+        errors,
+        isSaving,
+        selectedTemplate,
+        sequenceIsLoading,
+        handleInputChange,
+        handleNestedInputChange,
+        handleItemChange,
+        handleAddItem,
+        handleRemoveItem,
+        handleTemplateChange,
+        handleSaveInvoice,
     } = useInvoiceForm(initialFormData);
 
     // --------------------------------------------------------------------
@@ -122,7 +127,7 @@ const CreateInvoice = () => {
     // Wrapper function to call the save logic from the hook.
     // This keeps the component's click handler simple and declarative.
     const onSaveClick = () => {
-        handleSaveInvoice(selectedTemplate);
+        handleSaveInvoice();
     };
 
     // --------------------------------------------------------------------
@@ -176,11 +181,16 @@ const CreateInvoice = () => {
                     >
                         <CreateInvoiceForm
                             formData={formData}
-                            setFormData={setFormData}
-                            selectedTemplate={selectedTemplate}
-                            setSelectedTemplate={setSelectedTemplate}
                             errors={errors}
+                            selectedTemplate={selectedTemplate}
                             templateOptions={templateOptions}
+                            sequenceIsLoading={sequenceIsLoading}
+                            onTemplateChange={handleTemplateChange}
+                            onInputChange={handleInputChange}
+                            onNestedInputChange={handleNestedInputChange}
+                            onItemChange={handleItemChange}
+                            onAddItem={handleAddItem}
+                            onRemoveItem={handleRemoveItem}
                         />
                     </div>
 

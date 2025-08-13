@@ -13,7 +13,7 @@ import {
   ChevronLeftIcon,
   ExclamationCircleIcon
 } from '@heroicons/react/20/solid';
-import "react-day-picker/dist/style.css"; // Asegúrate que este CSS se carga
+import "react-day-picker/dist/style.css";
 
 const CustomDatePickerSimple = ({
   label,
@@ -25,16 +25,16 @@ const CustomDatePickerSimple = ({
   disabled = false,
   error = null,
   placeholder = "MM/DD/AAAA",
-  dateFormat = "MM/dd/yyyy", // Mantenemos el formato por si lo necesitas
+  dateFormat = "MM/dd/yyyy",
   ...props
 }) => {
 
-  // IDs para accesibilidad
+  // IDs for accessibility
   const datePickerId = id || `datepicker-${React.useId()}`;
   const errorId = error ? `${datePickerId}-error` : undefined;
   const isBlocked = readOnly || disabled;
 
-  // --- Clases para el Div Trigger (Manteniendo la lógica de estados) ---
+  // --- Classes for the Trigger Div (Maintaining the state logic) ---
   const getTriggerDivClasses = () => {
     let classes = `
        relative block w-full h-12 px-3 py-2 border rounded-md 
@@ -50,7 +50,7 @@ const CustomDatePickerSimple = ({
       if (error) {
         classes += ' border-red-500 focus:ring-1 focus:ring-red-500 focus:border-red-500';
       } else {
-        // Usar focus-within para simular focus en el div cuando el botón interno tiene foco
+        // Use focus-within to simulate focus on the div when the inner button has focus
         classes += ' border-gray-200 focus-within:ring-1 focus-within:ring-purple-600 focus-within:border-purple-600';
       }
     }
@@ -58,7 +58,7 @@ const CustomDatePickerSimple = ({
     return classes.replace(/\s+/g, ' ').trim();
   };
 
-  // --- Clases para el Texto del Valor/Placeholder (Manteniendo la lógica de estados) ---
+  // --- Classes for Value Text/Placeholder (Maintaining State Logic) ---
   const getValueTextClasses = () => {
     let classes = 'text-sm truncate';
     if (isBlocked) {
@@ -71,7 +71,7 @@ const CustomDatePickerSimple = ({
     return classes;
   };
 
-   // --- Clases para Iconos (Manteniendo la lógica de estados) ---
+   // --- Classes for Icons (Maintaining state logic) ---
    const getIconClasses = (isErrorIcon = false) => {
       let classes = 'h-5 w-5';
       if (isErrorIcon) {
@@ -93,34 +93,34 @@ const CustomDatePickerSimple = ({
       )}
       <Popover placement="bottom" disabled={isBlocked}>
         <PopoverHandler>
-          {/* Usar un 'div' normal como trigger si 'button' daba problemas,
-             pero añadir tabIndex para foco y onKeyDown para accesibilidad */}
+          {/* Use a normal 'div' as a trigger if 'button' was giving problems,
+             but add tabIndex for focus and onKeyDown for accessibility */}
           <div
             id={datePickerId}
-            tabIndex={isBlocked ? -1 : 0} // Permite foco si no está bloqueado
+            tabIndex={isBlocked ? -1 : 0}
             className={getTriggerDivClasses()}
             aria-haspopup="dialog"
             aria-invalid={!!error}
             aria-describedby={errorId}
-             onKeyDown={(e) => { // Permitir abrir con teclado si tiene foco
+             onKeyDown={(e) => {
                 if (!isBlocked && (e.key === 'Enter' || e.key === ' ')) {
                     e.preventDefault();
-                    // Necesitamos una forma de abrir el popover programáticamente
-                    // o simular un click aquí si MT lo permite.
-                    // Por ahora, esto solo previene la acción por defecto.
-                    // El click con ratón sí funciona.
+                        // We need a way to open the popover programmatically
+                        // or simulate a click here if MT allows it.
+                        // For now, this just prevents the default action.
+                        // Mouse clicks do work.
                 }
             }}
             {...props}
           >
-            {/* Contenido interno del trigger */}
+            {/*Internal content of the trigger */}
             <div className="flex items-center gap-2 overflow-hidden pointer-events-none"> {/* pointer-events-none para que el click pase al div padre */}
               <CalendarIcon className={getIconClasses()} aria-hidden="true"/>
               <span className={getValueTextClasses()}>
                 {value ? format(value, dateFormat) : placeholder}
               </span>
             </div>
-             {/* Icono de error (si aplica) */}
+             {/* Error icon (if applicable) */}
              {error && !isBlocked && (
                 <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                     <ExclamationCircleIcon className={getIconClasses(true)} aria-hidden="true" />
@@ -128,16 +128,16 @@ const CustomDatePickerSimple = ({
              )}
           </div>
         </PopoverHandler>
-        {/* --- CONTENIDO DEL POPOVER Y DAYPICKER RESTAURADO --- */}
+        {/* --- POPOVER AND DAYPICKER CONTENT RESTORED --- */}
         <PopoverContent className="z-[9999] p-4 bg-white shadow-lg rounded-2xl overflow-visible w-auto">
           <DayPicker
             mode="single"
             selected={value}
-            // Asegurarse que onChange solo se llama si no está bloqueado
+              // Make sure onChange is only called if it is not blocked
             onSelect={(selectedDate) => !isBlocked && onChange(selectedDate)}
             showOutsideDays
-            className="w-full custom-calendar" // Mantenemos la clase para los estilos JSX
-            // Componentes de icono restaurados a la versión original
+            className="w-full custom-calendar" // We keep the class for the JSX styles
+              // Icon components restored to original version
             components={{
               IconLeft: (props) => (
                 <ChevronLeftIcon {...props} className="h-4 w-4 stroke-2" />
@@ -150,30 +150,30 @@ const CustomDatePickerSimple = ({
         </PopoverContent>
         {/* ------------------------------------------------- */}
       </Popover>
-      {/* Mensaje de Error (se muestra si error existe y no está bloqueado) */}
+      {/* Error Message (displayed if error exists and not blocked) */}
       {error && !isBlocked && (
         <p className="text-red-600 text-xs mt-1" id={errorId}>
             {error}
         </p>
       )}
 
-      {/* --- ESTILOS JSX RESTAURADOS --- */}
+      {/* --- JSX STYLES RESTORED --- */}
       <style jsx>{`
-        .custom-calendar .rdp-day:hover:not(.rdp-day_selected):not(.rdp-day_outside) { /* Evitar hover en días no interactivos */
-          background-color: #f3e8ff; /* Un violeta más claro para hover */
+        .custom-calendar .rdp-day:hover:not(.rdp-day_selected):not(.rdp-day_outside) { /* Avoid hovering on non-interactive days */
+          background-color: #f3e8ff; /* A lighter purple for hover */
           border-radius: 8px;
         }
         .custom-calendar .rdp-day_selected {
-          background-color: #4416A8 !important; /* Tu violeta principal */
+          background-color: #4416A8 !important; /* Your main violet */
           color: white !important;
-          border-radius: 8px; /* Hacerlo consistente */
+          border-radius: 8px; /* Make it consistent */
         }
-         /* Opcional: Mejorar visibilidad del día actual */
+         /* Optional: Improve visibility of the current day */
         .custom-calendar .rdp-day_today {
              font-weight: bold;
              color: #4416A8;
         }
-        /* Ajustar tamaño/padding si es necesario */
+        /* Adjust size/padding if necessary */
         .custom-calendar .rdp-caption_label {
              font-size: 0.875rem; /* text-sm */
              font-weight: 500; /* medium */
